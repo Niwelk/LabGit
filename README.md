@@ -1,1 +1,1 @@
-# LabGit Project
+# GitLab2
