@@ -1,13 +1,25 @@
-name: CI Check
+name: Security Checks
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  test:
+  trufflehog-scan:
+    name: Scan for Secrets
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Dummy Test
-        run: echo "Все проверки успешно пройдены!"
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog OSS Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: ${{ github.head_ref || github.ref_name }}
+          extra_args: --only-verified
