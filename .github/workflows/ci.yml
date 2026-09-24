@@ -17,6 +17,6 @@ jobs:
           fetch-depth: 0
 
       - name: TruffleHog Open Source Scan
-        uses: trufflesecurity/trufflehog-actions@main
+        uses: trufflesecurity/trufflehog@main
         with:
           extra_args: --no-verification
