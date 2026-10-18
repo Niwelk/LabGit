@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: ./back
+    restart: always
+    container_name: app-backend
+    networks:
+      - app-net
+  frontend:
+    build: ./front
+    restart: always
+    container_name: app-frontend
+    ports:
+      - "80:80"
+    networks:
+      - app-net
+networks:
+  app-net:
+    driver: bridge

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab: Docker, KVM, Ansible</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 2rem; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 100%; border: 1px solid #334155; }
+        button { background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; font-weight: 600; margin-top: 1rem; transition: background 0.2s; }
+        button:hover { background: #2563eb; }
+        #result { margin-top: 1.5rem; background: #0f172a; padding: 1rem; border-radius: 0.5rem; text-align: left; font-family: monospace; font-size: 0.85rem; border: 1px solid #334155; min-height: 60px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Инфраструктурная Лаба</h2>
+        <p>Проверка связи фронтенда с бэкендом</p>
+        <button onclick="fetchData()">Запросить данные</button>
+        <div id="result">Нажмите кнопку для теста...</div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            const resDiv = document.getElementById('result');
+            resDiv.innerHTML = "Запрос отправлен...";
+            try {
+                // Если настроен Nginx-прокси или запуск на одном хосте с пробросом
+                const response = await fetch('/api/hello');
+                if (!response.ok) throw new Error('Ошибка HTTP: ' + response.status);
+                const data = await response.json();
+                resDiv.innerHTML = `<b>Статус:</b> Успех ✅<br>
+                                    <b>Сообщение:</b> ${data.message}<br>
+                                    <b>Хост бэкенда:</b> ${data.hostname}<br>
+                                    <b>Время:</b> ${data.timestamp}`;
+            } catch (error) {
+                resDiv.innerHTML = `<span style="color: #ef4444;">Ошибка соединения с бэкендом:<br>${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
